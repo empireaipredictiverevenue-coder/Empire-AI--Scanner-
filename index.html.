@@ -75,7 +75,7 @@ async function syncHUD() {
     hud.innerHTML = '<tr><td colspan="3" class="py-10 text-center text-yellow-500 animate-pulse">CONNECTING TO EMPIRE DATABASE...</td></tr>';
     
     try {
-        // Replace 'YOUR_SHEET_JSON_URL' with your Google Sheet API or Webhook URL
+        // 5vloEgeZkhu3TJ_AUSBlrska
         const response = await fetch('YOUR_SHEET_JSON_URL'); 
         const data = await response.json();
         
