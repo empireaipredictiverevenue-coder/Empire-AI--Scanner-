@@ -1,97 +1,63 @@
-<div class="max-w-6xl mx-auto mt-8 pb-20">
-    <div class="bg-slate-900 p-6 rounded-3xl border border-slate-800 neon-glow">
-        <div class="flex justify-between items-center mb-6">
-            <h2 class="text-sm font-bold text-green-500 uppercase tracking-widest">Intelligence HUD</h2>
-            <button onclick="syncHUD()" class="bg-slate-800 hover:bg-slate-700 text-[10px] px-4 py-2 rounded-full border border-slate-700 transition-all uppercase font-bold">Sync Latest Data</button>
-        </div>
-        
-        <div class="overflow-x-auto">
-            <table class="w-full text-left text-[11px] font-mono">
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Empire AI Scanner</title>
+    <style>
+        body { font-family: sans-serif; background: #111; color: white; padding: 20px; }
+        .card { background: #222; padding: 20px; border-radius: 10px; margin-bottom: 20px; border: 1px solid #444; }
+        button { background: #007bff; color: white; border: none; padding: 15px; width: 100%; border-radius: 5px; font-weight: bold; margin-top: 10px; }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; font-size: 12px; }
+        th, td { border: 1px solid #444; padding: 10px; text-align: left; }
+        th { background: #333; }
+    </style>
+</head>
+<body>
+
+    <div class="card">
+        <h1>empire-scanner</h1>
+        <p>Satellite-grade lead scanning and predictive revenue engine.</p>
+        <button onclick="alert('Scanning Miami...')">START MIAMI SCAN</button>
+    </div>
+
+    <div class="card">
+        <h2>EMPIRE INTELLIGENCE HUD</h2>
+        <button style="background: #28a745;" onclick="syncHUD()">SYNC LIVE LEADS</button>
+        <div id="hud-data">
+            <table>
                 <thead>
-                    <tr class="text-slate-500 border-b border-slate-800">
-                        <th class="pb-3 px-2">TARGET</
-                        <th class="pb-3 px-2">NICHE</th>
-                        <th class="pb-3 px-2 text-green-500">GROWTH PLAN / HOOK</th>
-                    </tr>
+                    <tr><th>Lead</th><th>Manus Hook</th></tr>
                 </thead>
-                <tbody id="hudBody" class="divide-y divide-slate-800/50">
-                    <tr>
-                        <td colspan="3" class="py-10 text-center text-slate-600 italic">No intelligence synced yet...</td>
-                    </tr>
+                <tbody id="lead-table">
+                    <tr><td colspan="2" style="text-align:center;">Hit Sync to pull data...</td></tr>
                 </tbody>
             </table>
         </div>
     </div>
-</async function syncHUD() {
-    const hud = document.getElementById('hudBody');
-    hud.innerHTML = '<tr><td colspan="3" class="py-10 text-center text-yellow-500 animate-pulse uppercase">Syncing with Empire Database...</td></tr>';
-    
-    try {
-        // https://api.steinhq.com/v1/storages/69dd55e63807a370b048991d
-        const response = await fetch('YOUR_RESULTS_API_URL'); 
-        const data = await response.json();
-        
-        hud.innerHTML = "";
-        data.slice(0, 5).forEach(row => {
-            const tr = document.createElement('tr');
-            tr.innerHTML = `
-                <td class="py-4 px-2 font-bold text-white">${row.businessName}</td>
-                <td class="py-4 px-2 text-slate-400">${row.niche}</td>
-                <td class="py-4 px-2 text-green-400 italic">"${row.hook}"</td>
-            `;
-            hud.prepend(tr);
-        });
-    } catch (err) {
-        hud.innerHTML = '<tr><td colspan="3" class="py-10 text-center text-red-500 uppercase">Sync Failed. Check API Connection.</td></tr>';
-    }
-}
 
-<div class="max-w-6xl mx-auto mt-8 pb-20">
-    <div class="bg-slate-900 p-6 rounded-3xl border border-slate-800 shadow-2xl">
-        <div class="flex justify-between items-center mb-6">
-            <h2 class="text-sm font-bold text-green-500 uppercase tracking-widest">Empire Intelligence HUD</h2>
-            <button onclick="syncHUD()" class="bg-slate-800 hover:bg-slate-700 text-[10px] px-4 py-2 rounded-full border border-slate-700 transition-all font-bold uppercase">Sync HUD</button>
-        </div>
-        <div class="overflow-x-auto">
-            <table class="w-full text-left text-[11px] font-mono">
-                <thead>
-                    <tr class="text-slate-500 border-b border-slate-800">
-                        <th class="pb-3 px-2">TARGET</th>
-                        <th class="pb-3 px-2">NICHE</th>
-                        <th class="pb-3 px-2 text-green-500">MANUS STRATEGY / HOOK</th>
-                    </tr>
-                </thead>
-                <tbody id="hudBody" class="divide-y divide-slate-800/50">
-                    <tr>
-                        <td colspan="3" class="py-10 text-center text-slate-600 italic">No intelligence synced yet. Hit Sync to refresh.</td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-    </div>
-</div>
-async function syncHUD() {
-    const hud = document.getElementById('hudBody');
-    hud.innerHTML = '<tr><td colspan="3" class="py-10 text-center text-yellow-500 animate-pulse">CONNECTING TO EMPIRE DATABASE...</td></tr>';
-    
-    try {
-        // 5vloEgeZkhu3TJ_AUSBlrska
-        const response = await fetch('YOUR_SHEET_JSON_URL'); 
-        const data = await response.json();
-        
-        hud.innerHTML = "";
-        data.slice(0, 5).forEach(row => {
-            const tr = document.createElement('tr');
-            tr.innerHTML = `
-                <td class="py-4 px-2 font-bold text-white">${row.businessName}</td>
-                <td class="py-4 px-2 text-slate-400">${row.niche}</td>
-                <td class="py-4 px-2 text-green-400 italic">"${row.hook}"</td>
-            `;
-            hud.prepend(tr);
-        });
-    } catch (err) {
-        hud.innerHTML = '<tr><td colspan="3" class="py-10 text-center text-red-500">SYNC FAILED. CHECK API CONNECTION.</td></tr>';
-    }
-}
-
-
+    <script>
+        async function syncHUD() {
+            const tableBody = document.getElementById('lead-table');
+            tableBody.innerHTML = '<tr><td colspan="2">Loading...</td></tr>';
+            try {
+                // REPLACE THE URL BELOW WITH YOUR SHEETY LINK
+                const response = await fetch('YOUR_SHEETY_URL_HERE');
+                const data = await response.json();
+                const leads = data.leads || data.sheet1; 
+                
+                tableBody.innerHTML = '';
+                leads.slice(-5).reverse().forEach(lead => {
+                    const row = `<tr>
+                        <td><strong>${lead.company || 'New Lead'}</strong></td>
+                        <td>${lead.hook || lead.strategy || 'Analyzing...'}</td>
+                    </tr>`;
+                    tableBody.innerHTML += row;
+                });
+            } catch (e) {
+                tableBody.innerHTML = '<tr><td colspan="2">Error: Check Sheety URL</td></tr>';
+            }
+        }
+    </script>
+</body>
+</html>
