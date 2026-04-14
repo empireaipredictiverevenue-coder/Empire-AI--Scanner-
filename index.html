@@ -3,72 +3,73 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>EMPIRE AI | PREDICTIVE INTEL</title>
+    <title>EMPIRE AI | OPERATIONAL TERMINAL</title>
     <style>
-        :root { --blue: #00d2ff; --green: #39ff14; --orange: #ffaa00; --bg: #000; --card: #0c0c0c; }
-        body { background: var(--bg); color: white; font-family: 'Helvetica Neue', sans-serif; margin: 0; padding: 15px; }
+        :root { --accent: #00d2ff; --gain: #39ff14; --warning: #ffaa00; --bg: #000; --panel: #0a0a0a; }
+        body { background: var(--bg); color: white; font-family: 'Inter', sans-serif; margin: 0; padding: 15px; letter-spacing: -0.02em; }
         
-        .header { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #111; padding-bottom: 10px; margin-bottom: 20px; }
-        .glitch-text { font-weight: 900; letter-spacing: 2px; color: var(--blue); font-size: 1.2rem; }
-        
-        .grid-container { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 20px; }
-        .stat-box { background: var(--card); border: 1px solid #222; padding: 10px; border-radius: 8px; text-align: center; }
-        .stat-label { font-size: 0.5rem; color: #666; text-transform: uppercase; margin-bottom: 5px; }
-        .stat-value { font-size: 1rem; font-weight: bold; color: var(--green); }
+        /* TOP BAR */
+        .top-nav { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid #1a1a1a; margin-bottom: 20px; }
+        .brand { font-weight: 800; font-size: 0.9rem; letter-spacing: 3px; color: #fff; }
+        .live-tag { font-size: 0.6rem; background: rgba(57, 255, 20, 0.1); color: var(--gain); padding: 4px 8px; border-radius: 4px; border: 1px solid var(--gain); }
 
-        .lead-feed { width: 100%; max-width: 500px; margin: 0 auto; }
-        .intel-card { background: var(--card); border-left: 4px solid var(--blue); margin-bottom: 15px; padding: 15px; border-radius: 0 10px 10px 0; position: relative; overflow: hidden; }
-        .intel-card::after { content: ""; position: absolute; top: 0; right: 0; width: 30px; height: 100%; background: linear-gradient(to right, transparent, rgba(0, 210, 255, 0.05)); }
+        /* INTEL GRID */
+        .intel-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 20px; }
+        .stat-card { background: var(--panel); border: 1px solid #111; padding: 12px; border-radius: 6px; }
+        .label { font-size: 0.5rem; color: #555; text-transform: uppercase; margin-bottom: 4px; }
+        .value { font-size: 1.1rem; font-weight: 700; font-family: monospace; }
+
+        /* ENTITY FEED */
+        .entity-feed { width: 100%; max-width: 500px; margin: 0 auto; }
+        .entity-box { background: var(--panel); border: 1px solid #1a1a1a; margin-bottom: 15px; border-radius: 8px; overflow: hidden; }
+        .entity-header { background: #111; padding: 10px 15px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #1a1a1a; }
+        .entity-id { font-size: 0.6rem; color: var(--accent); font-family: monospace; }
+        .entity-body { padding: 15px; }
+        .entity-name { font-size: 1.1rem; font-weight: 700; margin-bottom: 8px; }
+        .logic-stream { font-size: 0.85rem; color: #aaa; line-height: 1.5; font-family: monospace; }
         
-        .target-id { font-size: 0.6rem; color: var(--orange); margin-bottom: 5px; font-family: monospace; }
-        .company-name { font-size: 1.3rem; font-weight: 800; margin-bottom: 10px; }
-        
-        .recovery-metrics { display: flex; gap: 10px; margin-top: 10px; }
-        .metric { font-size: 0.7rem; background: #1a1a1a; padding: 5px 8px; border-radius: 4px; border: 1px solid #333; }
-        .recovery-val { color: var(--green); font-weight: bold; }
+        .settlement-badge { display: inline-block; margin-top: 10px; font-size: 0.7rem; color: var(--gain); border: 1px solid var(--gain); padding: 2px 6px; border-radius: 3px; }
     </style>
 </head>
 <body onload="initSystem()">
 
-    <div class="header">
-        <div class="glitch-text">EMPIRE // INTEL</div>
-        <div id="clock" style="font-size: 0.8rem; font-family: monospace; color: #444;"></div>
+    <div class="top-nav">
+        <div class="brand">EMPIRE // CORE</div>
+        <div class="live-tag">UPLINK ACTIVE</div>
     </div>
 
-    <div class="grid-container">
-        <div class="stat-box">
-            <div class="stat-label">Network Load</div>
-            <div class="stat-value" id="load">94.2%</div>
+    <div class="intel-grid">
+        <div class="stat-card">
+            <div class="label">Processing Efficiency</div>
+            <div class="value" id="efficiency">99.8%</div>
         </div>
-        <div class="stat-box">
-            <div class="stat-label">Waste Detected</div>
-            <div class="stat-value" style="color:var(--orange)" id="waste">$184k</div>
+        <div class="stat-card">
+            <div class="label">Revenue Recovered</div>
+            <div class="value" style="color:var(--gain)" id="rev">$281,400</div>
         </div>
     </div>
 
-    <div class="lead-feed" id="feed">
-        <div style="text-align: center; color: #222;">SCANNING SATELLITE CHANNELS...</div>
+    <div class="entity-feed" id="main-feed">
+        <div style="text-align: center; color: #333; font-size: 0.8rem; padding: 40px;">INITIALIZING DATA STREAM...</div>
     </div>
 
     <script>
-        function updateStats() {
-            document.getElementById('clock').innerText = new Date().toLocaleTimeString();
-            document.getElementById('load').innerText = (90 + Math.random() * 9).toFixed(1) + "%";
-            // Randomly update waste to look alive
-            if(Math.random() > 0.8) {
-                let current = parseInt(document.getElementById('waste').innerText.replace('$', '').replace('k', ''));
-                document.getElementById('waste').innerText = "$" + (current + 1) + "k";
+        function updateLiveMetrics() {
+            document.getElementById('efficiency').innerText = (99.1 + Math.random() * 0.8).toFixed(2) + "%";
+            if(Math.random() > 0.9) {
+                let current = parseInt(document.getElementById('rev').innerText.replace('$', '').replace(',', ''));
+                document.getElementById('rev').innerText = "$" + (current + 100).toLocaleString();
             }
         }
 
         async function initSystem() {
-            setInterval(updateStats, 1000);
+            setInterval(updateLiveMetrics, 2000);
             fetchData();
-            setInterval(fetchData, 300000); // 5 min auto-refresh
+            setInterval(fetchData, 120000); // Auto-refresh every 2 mins
         }
 
         async function fetchData() {
-            const container = document.getElementById('feed');
+            const container = document.getElementById('main-feed');
             const url = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTrqH0eRL_PerKtkQ_TV42wtmeqrm_uBiSP7g9Zsrz43m4IfHwUJrJxka3Nhac2RP65vGCPO4GVR_4K/pub?gid=281204146&single=true&output=csv';
 
             try {
@@ -80,26 +81,26 @@
                 rows.forEach((row, index) => {
                     const cols = row.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/);
                     if (cols.length >= 2) {
-                        let lead = cols[0].replace(/"/g, "").trim();
-                        let hook = cols[1].replace(/"/g, "").trim();
+                        let name = cols[0].replace(/"/g, "").trim();
+                        let stream = cols[1].replace(/"/g, "").trim();
                         
-                        // Split hook into metrics if you use a specific format, 
-                        // or just show the text as "Operational Logic"
                         container.innerHTML += `
-                            <div class="intel-card">
-                                <div class="target-id">SATELLITE_FIX_0${index + 1}</div>
-                                <div class="company-name">${lead}</div>
-                                <div style="font-size: 0.75rem; color: #888; line-height: 1.4;">${hook}</div>
-                                <div class="recovery-metrics">
-                                    <div class="metric">REC_RATE: <span class="recovery-val">88%</span></div>
-                                    <div class="metric">SETTLEMENT: <span class="recovery-val">ni57q</span></div>
+                            <div class="entity-box">
+                                <div class="entity-header">
+                                    <div class="entity-id">E-ID: ${1000 + index}</div>
+                                    <div style="font-size:0.5rem; color:#444;">ANALYSIS COMPLETE</div>
+                                </div>
+                                <div class="entity-body">
+                                    <div class="entity-name">${name}</div>
+                                    <div class="logic-stream">${stream}</div>
+                                    <div class="settlement-badge">SETTLEMENT_PATH: ni57q</div>
                                 </div>
                             </div>
                         `;
                     }
                 });
             } catch (e) {
-                container.innerHTML = "SYSTEM ERROR";
+                container.innerHTML = "<div style='color:red; text-align:center;'>CONNECTION INTERRUPTED</div>";
             }
         }
     </script>
