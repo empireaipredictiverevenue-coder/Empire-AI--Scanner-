@@ -5,11 +5,34 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>EMPIRE AI // CLOUD TERMINAL</title>
     <style>
-        :root { --blue: #00d2ff; --green: #39ff14; --bg: #000; --panel: #0d0d0d; }
-        body { background: var(--bg); color: #fff; font-family: -apple-system, system-ui, sans-serif; margin: 0; padding: 15px; overflow-x: hidden; }
+        :root { 
+            --blue: #00d2ff; 
+            --green: #39ff14; 
+            --bg: #000000; 
+            --panel: #0d0d0d; 
+            --text-high: #ffffff;
+            --text-dim: #b0b0b0;
+        }
         
-        /* HEADER & CLOUD ICON */
-        .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; border-bottom: 1px solid #222; padding-bottom: 15px; }
+        body { 
+            background: var(--bg); 
+            color: var(--text-high); 
+            font-family: -apple-system, system-ui, sans-serif; 
+            margin: 0; 
+            padding: 15px; 
+            overflow-x: hidden; 
+            -webkit-font-smoothing: antialiased;
+        }
+        
+        /* HEADER & CLOUD UPLINK */
+        .header { 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            margin-bottom: 25px; 
+            border-bottom: 1px solid var(--blue); 
+            padding-bottom: 15px; 
+        }
         .brand { display: flex; align-items: center; gap: 10px; }
         .logo-text { font-weight: 900; letter-spacing: 4px; font-size: 1.1rem; text-transform: uppercase; }
         
@@ -21,21 +44,21 @@
         .sys-info { text-align: right; }
         .cloud-status { color: var(--green); font-size: 0.6rem; font-weight: 900; letter-spacing: 1px; }
 
-        /* MARKET NAV */
+        /* MULTI-STACK NAV */
         .nav-container { display: flex; gap: 8px; margin-bottom: 25px; overflow-x: auto; padding-bottom: 5px; }
         .tab { padding: 10px 18px; border-radius: 8px; font-size: 0.7rem; font-weight: 900; text-transform: uppercase; cursor: pointer; border: 1px solid #333; color: #666; white-space: nowrap; transition: 0.3s; }
         .tab.active { border-color: var(--blue); color: var(--blue); background: rgba(0, 210, 255, 0.1); }
 
         /* DATA CARDS */
         .card { background: var(--panel); border: 1px solid #222; border-radius: 12px; margin-bottom: 15px; overflow: hidden; }
-        .card-header { background: #151515; padding: 10px 15px; display: flex; justify-content: space-between; font-size: 0.65rem; color: var(--blue); font-family: monospace; font-weight: bold; border-bottom: 1px solid #222; }
+        .card-header { background: #151515; padding: 10px 15px; display: flex; justify-content: space-between; font-size: 0.65rem; color: var(--blue); font-family: monospace; font-weight: bold; border-bottom: 1px solid #333; }
         .card-body { padding: 20px; }
         .card-title { font-size: 1.3rem; font-weight: 800; margin-bottom: 10px; color: #fff; }
-        .card-text { font-size: 1rem; color: #b0b0b0; line-height: 1.5; }
-        .tag { color: var(--green); font-weight: bold; background: rgba(57, 255, 20, 0.1); padding: 2px 6px; border-radius: 4px; }
+        .card-text { font-size: 1rem; color: var(--text-dim); line-height: 1.5; }
+        .tag { color: var(--green); font-weight: bold; background: rgba(57, 255, 20, 0.1); padding: 2px 6px; border-radius: 4px; border: 1px solid rgba(57, 255, 20, 0.2); }
 
-        /* CLOUD LOG */
-        .log-box { background: #050505; border: 2px solid var(--blue); padding: 15px; font-family: monospace; font-size: 0.75rem; color: var(--blue); height: 80px; overflow: hidden; border-radius: 10px; margin-top: 30px; }
+        /* CLOUD PROCESSING LOG */
+        .log-box { background: #050505; border: 2px solid var(--blue); padding: 15px; font-family: monospace; font-size: 0.75rem; color: var(--blue); height: 80px; overflow: hidden; border-radius: 10px; margin-top: 30px; box-shadow: 0 0 15px rgba(0, 210, 255, 0.05); }
     </style>
 </head>
 <body onload="boot()">
@@ -47,7 +70,7 @@
         </div>
         <div class="sys-info">
             <div class="cloud-status" id="cloud-sync">CLOUD SYNC: 100%</div>
-            <div style="font-size: 0.5rem; color: #444;">ENCRYPTED_UPLINK_v4.2</div>
+            <div style="font-size: 0.5rem; color: #555; margin-top: 2px;">ENCRYPTED_UPLINK_v4</div>
         </div>
     </div>
 
@@ -57,16 +80,25 @@
         <div class="tab" onclick="swap('roofing', this)">Roofing Leads</div>
     </div>
 
-    <div id="feed"></div>
+    <div id="feed">
+        <div style="text-align: center; color: #444; padding: 40px; font-family: monospace;">AWAITING SATELLITE DATA...</div>
+    </div>
 
-    <div style="font-size: 0.6rem; color: var(--blue); margin-top: 25px; font-weight: bold; letter-spacing: 2px; text-transform: uppercase;">Cloud Processing Log:</div>
+    <div style="font-size: 0.65rem; color: var(--blue); margin-top: 25px; font-weight: 900; letter-spacing: 2px; text-transform: uppercase;">Cloud Processing Log:</div>
     <div class="log-box" id="log-box">
         <div>[ CLOUD_INIT_SUCCESS ]</div>
     </div>
 
     <script>
-        const BASE = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTrqH0eRL_PerKtkQ_TV42wtmeqrm_uBiSP7g9Zsrz43m4IfHwUJrJxka3Nhac2RP65vGCPO4GVR_4K/pub?output=csv&gid=';
-        const GIDS = { logistics: '281204146', orlando: '0', roofing: '105432617' };
+        // CORE GID CONNECTION LOGIC
+        // If a tab breaks, update the GID number here.
+        const BASE = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTrqH0eRL_PerKtkQ_TV42wtmeqrm_uBiSP7g9Zsrz43m4IfHwUJrJxka3Nhac2RP65vGCPO4GVR_4K/pub?single=true&output=csv&gid=';
+        const GIDS = { 
+            logistics: '281204146', 
+            orlando: '0', 
+            roofing: '105432617' 
+        };
+        
         let current = 'logistics';
 
         function swap(stack, el) {
@@ -79,14 +111,13 @@
         async function boot() {
             load();
             setInterval(() => {
-                const logs = ["[ FETCHING_CLOUD_DATA ]", "[ OPTIMIZING_REVENUE_FLOW ]", "[ CLOUD_SHIELD_ACTIVE ]", "[ SYNCING_ORLANDO_REPORTS ]"];
+                const logs = ["[ FETCHING_CLOUD_DATA ]", "[ OPTIMIZING_REVENUE_FLOW ]", "[ CLOUD_SHIELD_ACTIVE ]", "[ SYNCING_MARKET_REPORTS ]", "[ SATELLITE_FIX_STABLE ]"];
                 const box = document.getElementById('log-box');
                 const div = document.createElement('div');
                 div.innerText = "> " + logs[Math.floor(Math.random() * logs.length)];
                 box.prepend(div);
-                if (box.children.length > 4) box.lastChild.remove();
+                if (box.children.length > 5) box.lastChild.remove();
                 
-                // Random cloud sync flicker for realism
                 document.getElementById('cloud-sync').innerText = "CLOUD SYNC: " + (98 + Math.random() * 2).toFixed(0) + "%";
             }, 3500);
             setInterval(load, 60000);
@@ -100,9 +131,12 @@
                 const rows = csv.split('\n').slice(1);
                 container.innerHTML = '';
 
+                let validRows = 0;
+
                 rows.forEach((row, i) => {
                     const cols = row.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/);
                     if (cols.length >= 2) {
+                        validRows++;
                         let name = cols[0].replace(/"/g, "").trim();
                         let info = cols[1].replace(/"/g, "").trim();
                         info = info.replace(/ni57q/g, '<span class="tag">ni57q</span>');
@@ -110,7 +144,7 @@
                         container.innerHTML += `
                             <div class="card">
                                 <div class="card-header">
-                                    <span>CLOUD_REF: ${current.toUpperCase()}_${i+100}</span>
+                                    <span>CLOUD_REF: ${current.toUpperCase()}_0${i+1}</span>
                                     <span style="color:var(--green)">NODE_ACTIVE</span>
                                 </div>
                                 <div class="card-body">
@@ -121,7 +155,13 @@
                         `;
                     }
                 });
-            } catch (e) { container.innerHTML = "CLOUD CONNECTION ERROR"; }
+                
+                if (validRows === 0) {
+                    container.innerHTML = "<div style='color:#ff4444; text-align:center; padding: 20px; font-family: monospace;'>ERROR: NO DATA FOUND. CHECK SHEET TAB GID.</div>";
+                }
+            } catch (e) { 
+                container.innerHTML = "<div style='color:#ff4444; text-align:center; padding: 20px; font-family: monospace;'>CLOUD CONNECTION ERROR.</div>"; 
+            }
         }
     </script>
 </body>
