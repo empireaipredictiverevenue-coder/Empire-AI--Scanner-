@@ -5,14 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>EMPIRE // EXECUTIVE TERMINAL</title>
     <style>
-        :root { --accent: #00d2ff; --gain: #39ff14; --warning: #ff4444; --bg: #000; --panel: #0a0a0a; }
+        :root { --accent: #00d2ff; --gain: #39ff14; --bg: #000; --panel: #0a0a0a; }
         body { background: var(--bg); color: white; font-family: -apple-system, system-ui, sans-serif; margin: 0; padding: 15px; overflow-x: hidden; }
         
         /* TOP HUD */
         .top-nav { display: flex; justify-content: space-between; align-items: center; padding: 15px 0; border-bottom: 1px solid #1a1a1a; margin-bottom: 25px; }
         .brand { font-weight: 900; font-size: 1rem; letter-spacing: 4px; color: #fff; }
         .status-pulse { height: 8px; width: 8px; background: var(--gain); border-radius: 50%; margin-right: 8px; box-shadow: 0 0 12px var(--gain); animation: pulse 2s infinite; }
-        @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.4; } 100% { opacity: 1; } }
+        @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
 
         /* ANALYTICS */
         .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 25px; }
@@ -22,15 +22,17 @@
 
         /* DATA FEED */
         .feed-header { font-size: 0.7rem; color: #333; margin-bottom: 10px; text-transform: uppercase; letter-spacing: 2px; border-left: 2px solid var(--accent); padding-left: 10px; }
-        .entity-box { background: var(--panel); border: 1px solid #151515; margin-bottom: 15px; border-radius: 12px; overflow: hidden; animation: slideIn 0.5s ease-out; }
-        @keyframes slideIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-        
+        .entity-box { background: var(--panel); border: 1px solid #151515; margin-bottom: 15px; border-radius: 12px; overflow: hidden; }
         .entity-top { background: #0e0e0e; padding: 10px 15px; display: flex; justify-content: space-between; font-size: 0.6rem; color: #444; font-family: monospace; }
         .entity-body { padding: 20px; }
         .entity-name { font-size: 1.3rem; font-weight: 800; margin-bottom: 12px; color: #fff; }
         .diagnostic-text { font-size: 0.95rem; color: #bbb; line-height: 1.6; }
         
         .ni-tag { color: var(--gain); font-weight: bold; background: rgba(57, 255, 20, 0.1); padding: 2px 4px; border-radius: 4px; }
+
+        /* OPERATIONS LOG */
+        .log-container { background: #050505; border: 1px solid #111; border-radius: 8px; padding: 10px; height: 60px; overflow: hidden; font-family: monospace; font-size: 0.6rem; color: #444; margin-top: 20px; }
+        .log-entry { margin-bottom: 4px; border-left: 2px solid #222; padding-left: 8px; }
     </style>
 </head>
 <body onload="init()">
@@ -49,7 +51,7 @@
         </div>
         <div class="stat-card">
             <div class="label">Total Settlement</div>
-            <div class="value" style="color:var(--gain)" id="rev">$412,050</div>
+            <div class="value" style="color:var(--gain)" id="rev">$412,075</div>
         </div>
     </div>
 
@@ -58,19 +60,42 @@
         <div style="text-align: center; color: #222; padding: 40px; font-size: 0.8rem;">ESTABLISHING CORE LINK...</div>
     </div>
 
+    <div class="log-container" id="ops-log">
+        <div class="log-entry">SYSTEM INITIALIZED...</div>
+        <div class="log-entry">ESTABLISHING SECURE SATELLITE HANDSHAKE...</div>
+    </div>
+
     <script>
+        const logs = [
+            "DECRYPTING LOGISTICS NODE...",
+            "REVENUE LEAK IDENTIFIED: NODE_04",
+            "SYNCING WITH ni57q SETTLEMENT LAYER...",
+            "CORE INTEGRITY CHECK: OPTIMAL",
+            "UPLINK STABLE: 128-BIT ENCRYPTION",
+            "SCANNING MIAMI HUB INFRASTRUCTURE..."
+        ];
+
+        function addLog() {
+            const logBox = document.getElementById('ops-log');
+            const entry = document.createElement('div');
+            entry.className = 'log-entry';
+            entry.innerText = logs[Math.floor(Math.random() * logs.length)];
+            logBox.prepend(entry);
+            if (logBox.children.length > 5) logBox.lastChild.remove();
+        }
+
         function updateStats() {
             document.getElementById('integrity').innerText = (99.95 + Math.random() * 0.04).toFixed(2) + "%";
-            if(Math.random() > 0.8) {
+            if(Math.random() > 0.85) {
                 let val = parseInt(document.getElementById('rev').innerText.replace('$', '').replace(',', ''));
-                document.getElementById('rev').innerText = "$" + (val + 25).toLocaleString();
+                document.getElementById('rev').innerText = "$" + (val + 125).toLocaleString();
             }
         }
 
         async function init() {
             setInterval(updateStats, 3000);
+            setInterval(addLog, 4000);
             await loadData();
-            // Refreshes data automatically every 60 seconds
             setInterval(loadData, 60000);
         }
 
@@ -90,7 +115,6 @@
                         let entity = cols[0].replace(/"/g, "").trim();
                         let diagnostic = cols[1].replace(/"/g, "").trim();
                         
-                        // FIX: Clean ni57q formatting
                         diagnostic = diagnostic.replace(/ni57q/g, '<span class="ni-tag">ni57q</span>');
 
                         container.innerHTML += `
