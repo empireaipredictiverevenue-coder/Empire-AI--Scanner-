@@ -3,136 +3,264 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>EMPIRE // EXECUTIVE TERMINAL</title>
+    <title>EMPIRE AI // CORE TERMINAL</title>
     <style>
-        :root { --accent: #00d2ff; --gain: #39ff14; --bg: #000; --panel: #0a0a0a; }
-        body { background: var(--bg); color: white; font-family: -apple-system, system-ui, sans-serif; margin: 0; padding: 15px; overflow-x: hidden; }
+        :root { 
+            --empire-blue: #00d2ff; 
+            --settlement-green: #39ff14; 
+            --deep-bg: #000000; 
+            --panel-gray: #0a0a0a; 
+            --text-dim: #666;
+        }
         
-        /* TOP HUD */
-        .top-nav { display: flex; justify-content: space-between; align-items: center; padding: 15px 0; border-bottom: 1px solid #1a1a1a; margin-bottom: 25px; }
-        .brand { font-weight: 900; font-size: 1rem; letter-spacing: 4px; color: #fff; }
-        .status-pulse { height: 8px; width: 8px; background: var(--gain); border-radius: 50%; margin-right: 8px; box-shadow: 0 0 12px var(--gain); animation: pulse 2s infinite; }
-        @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
+        body { 
+            background: var(--deep-bg); 
+            color: white; 
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif; 
+            margin: 0; 
+            padding: 15px; 
+            overflow-x: hidden;
+        }
+
+        /* LOGO & HEADER SECTION */
+        .header { 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            padding: 20px 0; 
+            border-bottom: 1px solid #111; 
+            margin-bottom: 30px; 
+        }
+        
+        .logo-text { 
+            font-weight: 900; 
+            font-size: 1.2rem; 
+            letter-spacing: 5px; 
+            color: #fff; 
+            text-transform: uppercase;
+        }
+        
+        .logo-accent { color: var(--empire-blue); }
+
+        .sys-status { 
+            display: flex; 
+            align-items: center; 
+            font-size: 0.65rem; 
+            color: var(--settlement-green); 
+            font-weight: bold; 
+            letter-spacing: 1px;
+        }
+
+        .pulse-dot { 
+            height: 7px; 
+            width: 7px; 
+            background: var(--settlement-green); 
+            border-radius: 50%; 
+            margin-right: 10px; 
+            box-shadow: 0 0 12px var(--settlement-green); 
+            animation: pulse-ring 2.5s infinite;
+        }
+
+        @keyframes pulse-ring { 0% { opacity: 1; } 50% { opacity: 0.3; } 100% { opacity: 1; } }
 
         /* ANALYTICS */
-        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 25px; }
-        .stat-card { background: var(--panel); border: 1px solid #111; padding: 15px; border-radius: 10px; }
-        .label { font-size: 0.55rem; color: #555; text-transform: uppercase; margin-bottom: 6px; letter-spacing: 1px; }
-        .value { font-size: 1.2rem; font-weight: 700; font-family: 'SF Mono', monospace; }
+        .analytics-row { 
+            display: grid; 
+            grid-template-columns: 1fr 1fr; 
+            gap: 15px; 
+            margin-bottom: 30px; 
+        }
+        
+        .stat-card { 
+            background: var(--panel-gray); 
+            border: 1px solid #151515; 
+            padding: 18px; 
+            border-radius: 12px; 
+        }
+        
+        .stat-label { 
+            font-size: 0.55rem; 
+            color: var(--text-dim); 
+            text-transform: uppercase; 
+            margin-bottom: 8px; 
+            letter-spacing: 1.5px;
+        }
+        
+        .stat-value { 
+            font-size: 1.3rem; 
+            font-weight: 700; 
+            font-family: 'SF Mono', 'Roboto Mono', monospace; 
+        }
 
         /* DATA FEED */
-        .feed-header { font-size: 0.7rem; color: #333; margin-bottom: 10px; text-transform: uppercase; letter-spacing: 2px; border-left: 2px solid var(--accent); padding-left: 10px; }
-        .entity-box { background: var(--panel); border: 1px solid #151515; margin-bottom: 15px; border-radius: 12px; overflow: hidden; }
-        .entity-top { background: #0e0e0e; padding: 10px 15px; display: flex; justify-content: space-between; font-size: 0.6rem; color: #444; font-family: monospace; }
-        .entity-body { padding: 20px; }
-        .entity-name { font-size: 1.3rem; font-weight: 800; margin-bottom: 12px; color: #fff; }
-        .diagnostic-text { font-size: 0.95rem; color: #bbb; line-height: 1.6; }
+        .feed-label { 
+            font-size: 0.7rem; 
+            color: #333; 
+            margin-bottom: 15px; 
+            text-transform: uppercase; 
+            letter-spacing: 3px; 
+            display: flex; 
+            align-items: center; 
+        }
         
-        .ni-tag { color: var(--gain); font-weight: bold; background: rgba(57, 255, 20, 0.1); padding: 2px 4px; border-radius: 4px; }
+        .feed-label::after { 
+            content: ""; 
+            height: 1px; 
+            flex-grow: 1; 
+            background: #111; 
+            margin-left: 15px; 
+        }
 
-        /* OPERATIONS LOG */
-        .log-container { background: #050505; border: 1px solid #111; border-radius: 8px; padding: 10px; height: 60px; overflow: hidden; font-family: monospace; font-size: 0.6rem; color: #444; margin-top: 20px; }
-        .log-entry { margin-bottom: 4px; border-left: 2px solid #222; padding-left: 8px; }
+        .entity-card { 
+            background: var(--panel-gray); 
+            border: 1px solid #1a1a1a; 
+            margin-bottom: 15px; 
+            border-radius: 14px; 
+            overflow: hidden; 
+        }
+        
+        .entity-meta { 
+            background: #0d0d0d; 
+            padding: 10px 18px; 
+            display: flex; 
+            justify-content: space-between; 
+            font-size: 0.6rem; 
+            color: #444; 
+            font-family: monospace; 
+        }
+
+        .entity-body { padding: 22px; }
+        
+        .entity-title { 
+            font-size: 1.4rem; 
+            font-weight: 800; 
+            margin-bottom: 12px; 
+            color: #fff; 
+        }
+        
+        .entity-diagnostic { 
+            font-size: 1rem; 
+            color: #999; 
+            line-height: 1.6; 
+        }
+        
+        .settlement-tag { 
+            color: var(--settlement-green); 
+            font-weight: bold; 
+            background: rgba(57, 255, 20, 0.08); 
+            padding: 2px 6px; 
+            border-radius: 4px; 
+        }
+
+        /* BOTTOM OPS LOG */
+        .ops-log { 
+            margin-top: 25px; 
+            background: #050505; 
+            border-top: 1px solid #111; 
+            padding: 15px; 
+            font-family: monospace; 
+            font-size: 0.65rem; 
+            color: #333; 
+            height: 50px; 
+            overflow: hidden; 
+        }
     </style>
 </head>
-<body onload="init()">
+<body onload="bootSystem()">
 
-    <div class="top-nav">
-        <div class="brand">EMPIRE // CORE</div>
-        <div style="display: flex; align-items: center; font-size: 0.6rem; color: var(--gain); font-weight: bold;">
-            <div class="status-pulse"></div> AUTONOMOUS FEED
+    <div class="header">
+        <div class="logo-text">EMPIRE<span class="logo-accent">AI</span></div>
+        <div class="sys-status">
+            <div class="pulse-dot"></div> CORE LINK
         </div>
     </div>
 
-    <div class="grid">
+    <div class="analytics-row">
         <div class="stat-card">
-            <div class="label">System Integrity</div>
-            <div class="value" id="integrity">99.99%</div>
+            <div class="label">INTEGRITY</div>
+            <div class="stat-value" id="uptime">99.99%</div>
         </div>
         <div class="stat-card">
-            <div class="label">Total Settlement</div>
-            <div class="value" style="color:var(--gain)" id="rev">$412,075</div>
+            <div class="label">SETTLEMENT</div>
+            <div class="stat-value" style="color:var(--settlement-green)" id="rev-total">$482,100</div>
         </div>
     </div>
 
-    <div class="feed-header">Live Intelligence Stream</div>
-    <div id="main-stream">
-        <div style="text-align: center; color: #222; padding: 40px; font-size: 0.8rem;">ESTABLISHING CORE LINK...</div>
+    <div class="feed-label">Logic Streams</div>
+    <div id="intel-stream">
+        <div style="text-align: center; color: #222; padding: 50px;">INITIALIZING CORE FEED...</div>
     </div>
 
-    <div class="log-container" id="ops-log">
-        <div class="log-entry">SYSTEM INITIALIZED...</div>
-        <div class="log-entry">ESTABLISHING SECURE SATELLITE HANDSHAKE...</div>
+    <div class="ops-log" id="ops-log">
+        <div>> INITIALIZING EMPIRE CORE...</div>
     </div>
 
     <script>
-        const logs = [
-            "DECRYPTING LOGISTICS NODE...",
-            "REVENUE LEAK IDENTIFIED: NODE_04",
-            "SYNCING WITH ni57q SETTLEMENT LAYER...",
-            "CORE INTEGRITY CHECK: OPTIMAL",
-            "UPLINK STABLE: 128-BIT ENCRYPTION",
-            "SCANNING MIAMI HUB INFRASTRUCTURE..."
+        const systemLogs = [
+            "SATELLITE HANDSHAKE VERIFIED",
+            "REVENUE LEAK MAP UPDATED",
+            "SYNCING SETTLEMENT LAYER: ni57q",
+            "ENTROPY CHECK COMPLETE",
+            "LOGISTICS DATASTREAM ENCRYPTED"
         ];
 
-        function addLog() {
+        function runLogs() {
             const logBox = document.getElementById('ops-log');
             const entry = document.createElement('div');
-            entry.className = 'log-entry';
-            entry.innerText = logs[Math.floor(Math.random() * logs.length)];
+            entry.innerText = "> " + systemLogs[Math.floor(Math.random() * systemLogs.length)];
             logBox.prepend(entry);
-            if (logBox.children.length > 5) logBox.lastChild.remove();
+            if (logBox.children.length > 3) logBox.lastChild.remove();
         }
 
-        function updateStats() {
-            document.getElementById('integrity').innerText = (99.95 + Math.random() * 0.04).toFixed(2) + "%";
-            if(Math.random() > 0.85) {
-                let val = parseInt(document.getElementById('rev').innerText.replace('$', '').replace(',', ''));
-                document.getElementById('rev').innerText = "$" + (val + 125).toLocaleString();
+        function updateAnalytics() {
+            document.getElementById('uptime').innerText = (99.96 + Math.random() * 0.03).toFixed(2) + "%";
+            if(Math.random() > 0.8) {
+                let current = parseInt(document.getElementById('rev-total').innerText.replace('$', '').replace(',', ''));
+                document.getElementById('rev-total').innerText = "$" + (current + 250).toLocaleString();
             }
         }
 
-        async function init() {
-            setInterval(updateStats, 3000);
-            setInterval(addLog, 4000);
-            await loadData();
-            setInterval(loadData, 60000);
+        async function bootSystem() {
+            setInterval(updateAnalytics, 3000);
+            setInterval(runLogs, 5000);
+            await streamData();
+            setInterval(streamData, 60000);
         }
 
-        async function loadData() {
-            const container = document.getElementById('main-stream');
+        async function streamData() {
+            const container = document.getElementById('intel-stream');
             const url = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTrqH0eRL_PerKtkQ_TV42wtmeqrm_uBiSP7g9Zsrz43m4IfHwUJrJxka3Nhac2RP65vGCPO4GVR_4K/pub?gid=281204146&single=true&output=csv';
 
             try {
                 const response = await fetch(url);
-                const csvData = await response.text();
-                const rows = csvData.split('\n').slice(1);
+                const csv = await response.text();
+                const entries = csv.split('\n').slice(1);
                 container.innerHTML = '';
 
-                rows.forEach((row, i) => {
-                    const cols = row.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/);
-                    if (cols.length >= 2) {
-                        let entity = cols[0].replace(/"/g, "").trim();
-                        let diagnostic = cols[1].replace(/"/g, "").trim();
+                entries.forEach((row, i) => {
+                    const data = row.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/);
+                    if (data.length >= 2) {
+                        let entity = data[0].replace(/"/g, "").trim();
+                        let diagnostic = data[1].replace(/"/g, "").trim();
                         
-                        diagnostic = diagnostic.replace(/ni57q/g, '<span class="ni-tag">ni57q</span>');
+                        diagnostic = diagnostic.replace(/ni57q/g, '<span class="settlement-tag">ni57q</span>');
 
                         container.innerHTML += `
-                            <div class="entity-box">
-                                <div class="entity-top">
-                                    <span>STREAM_REF: ${i+1024}</span>
-                                    <span>ANALYSIS: ACTIVE</span>
+                            <div class="entity-card">
+                                <div class="entity-meta">
+                                    <span>SYSTEM_ID: 00${i+1}</span>
+                                    <span>STATUS: OPTIMAL</span>
                                 </div>
                                 <div class="entity-body">
-                                    <div class="entity-name">${entity}</div>
-                                    <div class="diagnostic-text">${diagnostic}</div>
+                                    <div class="entity-title">${entity}</div>
+                                    <div class="entity-diagnostic">${diagnostic}</div>
                                 </div>
                             </div>
                         `;
                     }
                 });
             } catch (e) {
-                container.innerHTML = "<div style='color:var(--warning); text-align:center;'>LINK TIMEOUT</div>";
+                container.innerHTML = "<div style='color:red; text-align:center;'>UPLINK FAILURE</div>";
             }
         }
     </script>
