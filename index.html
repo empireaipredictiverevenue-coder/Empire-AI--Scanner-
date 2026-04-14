@@ -5,72 +5,41 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>EMPIRE AI // CLOUD TERMINAL</title>
     <style>
-        :root { 
-            --blue: #00d2ff; 
-            --green: #39ff14; 
-            --bg: #000000; 
-            --panel: #0d0d0d; 
-            --text-high: #ffffff;
-            --text-dim: #b0b0b0;
-        }
+        :root { --blue: #00d2ff; --green: #39ff14; --bg: #000; --panel: #0d0d0d; }
+        body { background: var(--bg); color: #fff; font-family: -apple-system, system-ui, sans-serif; margin: 0; padding: 15px; }
         
-        body { 
-            background: var(--bg); 
-            color: var(--text-high); 
-            font-family: -apple-system, system-ui, sans-serif; 
-            margin: 0; 
-            padding: 15px; 
-            overflow-x: hidden; 
-            -webkit-font-smoothing: antialiased;
-        }
-        
-        /* HEADER & CLOUD UPLINK */
-        .header { 
-            display: flex; 
-            justify-content: space-between; 
-            align-items: center; 
-            margin-bottom: 25px; 
-            border-bottom: 1px solid var(--blue); 
-            padding-bottom: 15px; 
-        }
-        .brand { display: flex; align-items: center; gap: 10px; }
+        /* HEADER */
+        .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; border-bottom: 1px solid var(--blue); padding-bottom: 15px; }
         .logo-text { font-weight: 900; letter-spacing: 4px; font-size: 1.1rem; text-transform: uppercase; }
-        
-        /* CLOUD ANIMATION */
-        .cloud-node { width: 14px; height: 10px; border: 2px solid var(--blue); border-radius: 10px; position: relative; animation: cloud-pulse 2s infinite; }
-        .cloud-node::after { content: ''; position: absolute; top: -5px; left: 3px; width: 6px; height: 6px; border-top: 2px solid var(--blue); border-left: 2px solid var(--blue); border-radius: 50%; }
-        @keyframes cloud-pulse { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.5; transform: scale(0.9); } }
-
-        .sys-info { text-align: right; }
         .cloud-status { color: var(--green); font-size: 0.6rem; font-weight: 900; letter-spacing: 1px; }
 
-        /* MULTI-STACK NAV */
+        /* NAVIGATION */
         .nav-container { display: flex; gap: 8px; margin-bottom: 25px; overflow-x: auto; padding-bottom: 5px; }
-        .tab { padding: 10px 18px; border-radius: 8px; font-size: 0.7rem; font-weight: 900; text-transform: uppercase; cursor: pointer; border: 1px solid #333; color: #666; white-space: nowrap; transition: 0.3s; }
+        .tab { padding: 10px 18px; border-radius: 8px; font-size: 0.7rem; font-weight: 900; text-transform: uppercase; cursor: pointer; border: 1px solid #333; color: #666; white-space: nowrap; }
         .tab.active { border-color: var(--blue); color: var(--blue); background: rgba(0, 210, 255, 0.1); }
 
         /* DATA CARDS */
-        .card { background: var(--panel); border: 1px solid #222; border-radius: 12px; margin-bottom: 15px; overflow: hidden; }
-        .card-header { background: #151515; padding: 10px 15px; display: flex; justify-content: space-between; font-size: 0.65rem; color: var(--blue); font-family: monospace; font-weight: bold; border-bottom: 1px solid #333; }
+        .card { background: var(--panel); border: 1px solid #222; border-radius: 12px; margin-bottom: 15px; overflow: hidden; animation: slideIn 0.3s ease-out; }
+        .card-header { background: #151515; padding: 10px 15px; display: flex; justify-content: space-between; font-size: 0.65rem; color: var(--blue); font-family: monospace; border-bottom: 1px solid #333; }
         .card-body { padding: 20px; }
-        .card-title { font-size: 1.3rem; font-weight: 800; margin-bottom: 10px; color: #fff; }
-        .card-text { font-size: 1rem; color: var(--text-dim); line-height: 1.5; }
-        .tag { color: var(--green); font-weight: bold; background: rgba(57, 255, 20, 0.1); padding: 2px 6px; border-radius: 4px; border: 1px solid rgba(57, 255, 20, 0.2); }
+        .card-title { font-size: 1.2rem; font-weight: 800; margin-bottom: 8px; color: #fff; }
+        .card-text { font-size: 0.95rem; color: #b0b0b0; line-height: 1.4; }
+        .tag { color: var(--green); font-weight: bold; background: rgba(57, 255, 20, 0.1); padding: 2px 6px; border-radius: 4px; font-size: 0.8rem; }
 
-        /* CLOUD PROCESSING LOG */
-        .log-box { background: #050505; border: 2px solid var(--blue); padding: 15px; font-family: monospace; font-size: 0.75rem; color: var(--blue); height: 80px; overflow: hidden; border-radius: 10px; margin-top: 30px; box-shadow: 0 0 15px rgba(0, 210, 255, 0.05); }
+        @keyframes slideIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* LOG BOX */
+        .log-box { background: #050505; border: 2px solid var(--blue); padding: 12px; font-family: monospace; font-size: 0.7rem; color: var(--blue); height: 60px; overflow: hidden; border-radius: 8px; margin-top: 20px; }
+        .error-msg { color: #ff4444; text-align: center; padding: 40px; font-family: monospace; font-size: 0.75rem; border: 1px dashed #ff4444; border-radius: 10px; }
     </style>
 </head>
 <body onload="boot()">
 
     <div class="header">
-        <div class="brand">
-            <div class="cloud-node"></div>
-            <div class="logo-text">EMPIRE<span style="color:var(--blue)">AI</span></div>
-        </div>
+        <div class="logo-text">EMPIRE<span style="color:var(--blue)">AI</span></div>
         <div class="sys-info">
-            <div class="cloud-status" id="cloud-sync">CLOUD SYNC: 100%</div>
-            <div style="font-size: 0.5rem; color: #555; margin-top: 2px;">ENCRYPTED_UPLINK_v4</div>
+            <div class="cloud-status" id="cloud-sync">UPLINK_ACTIVE</div>
+            <div style="font-size: 0.5rem; color: #555; text-align: right;">v5.0_STRIKE_DATA</div>
         </div>
     </div>
 
@@ -80,19 +49,16 @@
         <div class="tab" onclick="swap('roofing', this)">Roofing Leads</div>
     </div>
 
-    <div id="feed">
-        <div style="text-align: center; color: #444; padding: 40px; font-family: monospace;">AWAITING SATELLITE DATA...</div>
-    </div>
+    <div id="feed"></div>
 
-    <div style="font-size: 0.65rem; color: var(--blue); margin-top: 25px; font-weight: 900; letter-spacing: 2px; text-transform: uppercase;">Cloud Processing Log:</div>
-    <div class="log-box" id="log-box">
-        <div>[ CLOUD_INIT_SUCCESS ]</div>
-    </div>
+    <div class="log-box" id="log-box"><div>[ SYSTEM_READY ]</div></div>
 
     <script>
-        // CORE GID CONNECTION LOGIC
-        // If a tab breaks, update the GID number here.
-        const BASE = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTrqH0eRL_PerKtkQ_TV42wtmeqrm_uBiSP7g9Zsrz43m4IfHwUJrJxka3Nhac2RP65vGCPO4GVR_4K/pub?single=true&output=csv&gid=';
+        // 1. YOUR MASTER SHEET ID
+        const SHEET_ID = '2PACX-1vTrqH0eRL_PerKtkQ_TV42wtmeqrm_uBiSP7g9Zsrz43m4IfHwUJrJxka3Nhac2RP65vGCPO4GVR_4K';
+
+        // 2. YOUR TAB IDs (GIDs) 
+        // IF A TAB FAILS: Click the tab in your browser, copy the gid= number at the end of the URL, and paste it here.
         const GIDS = { 
             logistics: '281204146', 
             orlando: '0', 
@@ -111,56 +77,59 @@
         async function boot() {
             load();
             setInterval(() => {
-                const logs = ["[ FETCHING_CLOUD_DATA ]", "[ OPTIMIZING_REVENUE_FLOW ]", "[ CLOUD_SHIELD_ACTIVE ]", "[ SYNCING_MARKET_REPORTS ]", "[ SATELLITE_FIX_STABLE ]"];
+                const logs = ["[ FETCHING_UPLINK ]", "[ SCANNING_GRID ]", "[ NODE_SYNC_STABLE ]", "[ REVENUE_LEAK_DETECTED ]"];
                 const box = document.getElementById('log-box');
                 const div = document.createElement('div');
                 div.innerText = "> " + logs[Math.floor(Math.random() * logs.length)];
                 box.prepend(div);
-                if (box.children.length > 5) box.lastChild.remove();
-                
-                document.getElementById('cloud-sync').innerText = "CLOUD SYNC: " + (98 + Math.random() * 2).toFixed(0) + "%";
-            }, 3500);
-            setInterval(load, 60000);
+                if (box.children.length > 4) box.lastChild.remove();
+            }, 4000);
         }
 
         async function load() {
             const container = document.getElementById('feed');
+            // We use /pub?output=csv to bypass the HTML view and get raw data
+            const url = `https://docs.google.com/spreadsheets/d/e/${SHEET_ID}/pub?output=csv&gid=${GIDS[current]}`;
+            
             try {
-                const res = await fetch(BASE + GIDS[current]);
+                const res = await fetch(url);
+                if (!res.ok) throw new Error('CONNECTION_BLOCKED');
+                
                 const csv = await res.text();
-                const rows = csv.split('\n').slice(1);
+                const rows = csv.split('\n').slice(1); // Skip the header row
                 container.innerHTML = '';
 
-                let validRows = 0;
-
                 rows.forEach((row, i) => {
+                    // This regex handles commas inside quotes perfectly
                     const cols = row.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/);
                     if (cols.length >= 2) {
-                        validRows++;
                         let name = cols[0].replace(/"/g, "").trim();
                         let info = cols[1].replace(/"/g, "").trim();
-                        info = info.replace(/ni57q/g, '<span class="tag">ni57q</span>');
+                        
+                        // Highlights specific keywords automatically
+                        info = info.replace(/SCAN:|LEAK:|GAP:/g, match => `<span class="tag">${match}</span>`);
 
                         container.innerHTML += `
                             <div class="card">
                                 <div class="card-header">
-                                    <span>CLOUD_REF: ${current.toUpperCase()}_0${i+1}</span>
-                                    <span style="color:var(--green)">NODE_ACTIVE</span>
+                                    <span>DATA_NODE: ${current.toUpperCase()}_${i+1}</span>
+                                    <span style="color:var(--green)">SYNC_OK</span>
                                 </div>
                                 <div class="card-body">
                                     <div class="card-title">${name}</div>
                                     <div class="card-text">${info}</div>
                                 </div>
-                            </div>
-                        `;
+                            </div>`;
                     }
                 });
-                
-                if (validRows === 0) {
-                    container.innerHTML = "<div style='color:#ff4444; text-align:center; padding: 20px; font-family: monospace;'>ERROR: NO DATA FOUND. CHECK SHEET TAB GID.</div>";
-                }
             } catch (e) { 
-                container.innerHTML = "<div style='color:#ff4444; text-align:center; padding: 20px; font-family: monospace;'>CLOUD CONNECTION ERROR.</div>"; 
+                container.innerHTML = `
+                <div class="error-msg">
+                    <b style="color:var(--blue)">! UPLINK_FAILURE</b><br><br>
+                    TAB: ${current.toUpperCase()}<br>
+                    TARGET_GID: ${GIDS[current]}<br><br>
+                    <span style="color:#666">ACTION REQUIRED:<br>1. Click "File > Share > Publish to web"<br>2. Set dropdown to "Entire Document"<br>3. Click "Publish"</span>
+                </div>`;
             }
         }
     </script>
